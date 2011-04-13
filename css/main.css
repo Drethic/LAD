@@ -1,0 +1,30 @@
+.doableOperation {
+    background-color: #22bb11;
+    border: 1px #007700 solid;
+    text-align: center;
+    padding: 1px;
+}
+
+.disabledOperation {
+    background-color: #bb2211;
+    border: 1px #770000 solid;
+    text-align: center;
+    padding: 1px;
+}
+
+#loginbutton, #newuserbutton {
+    font-size: 0.6em;
+}
+
+#usernameerror, #passworderror, #cpassworderror, #emailerror {
+    font-weight: bold;
+}
+
+#layout-container {
+    width: 100%;
+    height: 100%;
+}
+
+#south {
+    background: url(images/taskbar-bg.png);
+}
