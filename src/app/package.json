@@ -1,0 +1,23 @@
+{
+  "name": "lad-app",
+  "version": "0.0.1",
+  "description": "LAD Application",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Drethic and m1sf17",
+  "license": "MIT",
+  "dependencies": {
+    "bunyan": "^1.8.1",
+    "express": "^4.13.4",
+    "mongojs": "^2.4.0"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-bower-task": "^0.4.0",
+    "grunt-contrib-jshint": "^1.0.0",
+    "grunt-contrib-requirejs": "^1.0.0",
+    "grunt-contrib-uglify": "^1.0.1"
+  }
+}

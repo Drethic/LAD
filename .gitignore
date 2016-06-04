@@ -1,4 +1,8 @@
-src/libs/js/*
-src/libs/css/*
-src/libs/fonts/*
+src/app/libs/js/*
+src/app/libs/css/*
+src/app/libs/fonts/*
 node_modules
+data/db/*
+!data/db/readme.md
+logs/*
+!logs/readme.md

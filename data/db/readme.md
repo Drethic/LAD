@@ -1,0 +1,1 @@
+# Place holder for MongoDB data directory.

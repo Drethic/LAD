@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "grunt bower:install"
+    "postinstall": "grunt && npm --prefix ./src/app install ./src/app && npm --prefix ./src/api install ./src/api && slc start src/app && slc start src/api"
   },
   "repository": {
     "type": "git",
@@ -18,15 +18,10 @@
   },
   "homepage": "https://github.com/Drethic/LAD#readme",
   "dependencies": {
-    "bunyan": "^1.8.1",
-    "express": "^4.13.4"
-  },
-  "devDependencies": {
     "bower": "^1.7.9",
     "grunt": "^1.0.1",
-    "grunt-bower-task": "^0.4.0",
-    "grunt-contrib-jshint": "^1.0.0",
-    "grunt-contrib-requirejs": "^1.0.0",
-    "grunt-contrib-uglify": "^1.0.1"
+    "grunt-bower-task": "^0.4.0"
+  },
+  "devDependencies": {
   }
 }
