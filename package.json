@@ -1,0 +1,30 @@
+{
+  "name": "lad",
+  "version": "0.0.1",
+  "description": "Life and Death",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Drethic/LAD.git"
+  },
+  "author": "Drethic and m1sf17",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Drethic/LAD/issues"
+  },
+  "homepage": "https://github.com/Drethic/LAD#readme",
+  "dependencies": {
+    "bunyan": "^1.8.1",
+    "express": "^4.13.4"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-bower-task": "^0.4.0",
+    "grunt-contrib-jshint": "^1.0.0",
+    "grunt-contrib-requirejs": "^1.0.0",
+    "grunt-contrib-uglify": "^1.0.1"
+  }
+}

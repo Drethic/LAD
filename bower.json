@@ -1,0 +1,78 @@
+{
+  "name": "lad",
+  "description": "Life and Death",
+  "main": "index.js",
+  "authors": [
+    "Drethic and m1sf17"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/Drethic/LAD",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "lodash": "^4.13.1",
+    "requirejs": "*",
+    "jquery": "1.*",
+    "backbone": "*",
+    "underscore": "*",
+    "bootstrap": "*",
+    "font-awesome": "*",
+    "backbone-validation": "*",
+    "backbone.paginator": "*",
+    "moment": "*"
+  },
+  "exportsOverride": {
+    "lodash": {
+      "js": "dist/lodash.min.js"
+    },
+    "requirejs": {
+      "js": "require.js"
+    },
+    "text": {
+      "js": "text.js"
+    },
+    "jquery": {
+      "js": "dist/jquery*.js",
+      "js/map": "dist/jquery*.map"
+    },
+    "jquery-1.*": {},
+    "backbone": {
+      "js": "backbone.js"
+    },
+    "underscore": {
+      "js": "underscore*.js",
+      "js/map": "underscore*.map"
+    },
+    "bootstrap": {
+      "js": "dist/js/bootstrap*.js",
+      "js/map": "dist/js/bootstrap*.map",
+      "fonts": "dist/fonts/*",
+      "css": "dist/css/*"
+    },
+    "font-awesome": {
+      "css": "css/*",
+      "fonts": "fonts/*"
+    },
+    "backbone-validation": {
+      "js": "dist/*.js"
+    },
+    "backbone.paginator": {
+      "js": "lib/*.js"
+    },
+    "chosen": {
+      "js": "chosen.jquery*.js",
+      "css/img": "chose*.png",
+      "css": "chosen*.css"
+    },
+    "moment": {
+      "js": "moment.js",
+      "js": "min/*.js",
+      "js/lang": "lang/*.js"
+    }
+  }
+}
