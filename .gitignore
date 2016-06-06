@@ -6,3 +6,4 @@ data/db/*
 !data/db/readme.md
 logs/*
 !logs/readme.md
+.vagrant

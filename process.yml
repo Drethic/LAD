@@ -1,0 +1,23 @@
+apps:
+  - script: src/api/server.js
+    name: lad-api
+    watch: false
+    error_file:
+      logs/api_error.log
+    out_file:
+      logs/api_out.log
+    env:
+      NODE_ENV: development
+    env_production:
+      NODE_ENV: production
+  - script: src/app/app.js
+    name: lad-app
+    watch: false
+    error_file:
+      logs/app_error.log
+    out_file:
+      logs/app_out.log
+    env:
+      NODE_ENV: development
+    env_production:
+      NODE_ENV: production
