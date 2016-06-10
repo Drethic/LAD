@@ -1,47 +1,42 @@
-// /*global require*/
-// /* jshint -W097 */
-// 'use strict';
+/*global require*/
+/* jshint -W097 */
+'use strict';
 
-// // Require.js allows us to configure shortcut alias
-// require.config({
-//   // The shim config allows us to configure dependencies for
-//   // scripts that do not call define() to register a module
-//   shim: {
-//     underscore: {
-//       exports: '_'
-//     },
-//     backbone: {
-//       deps: [
-//         'underscore',
-//         'jquery'
-//       ],
-//       exports: 'Backbone'
-//     },
-//     backboneLocalstorage: {
-//       deps: ['backbone'],
-//       exports: 'Store'
-//     }
-//   },
-//   paths: {
-//     jquery: '../node_modules/jquery/dist/jquery',
-//     underscore: '../node_modules/underscore/underscore',
-//     backbone: '../node_modules/backbone/backbone',
-//     backboneLocalstorage: '../node_modules/backbone.localstorage/backbone.localStorage',
-//     text: '../node_modules/requirejs-text/text'
-//   }
-// });
+// Require.js allows us to configure shortcut alias
+require.config({
+  // The shim config allows us to configure dependencies for
+  // scripts that do not call define() to register a module
+  shim: {
+    underscore: {
+      exports: '_'
+    },
+    backbone: {
+      deps: [
+        'underscore',
+        'jquery'
+      ],
+      exports: 'Backbone'
+    },
+    backboneLocalstorage: {
+      deps: ['backbone'],
+      exports: 'Store'
+    }
+  },
+  paths: {
+    jquery: '../libs/js/jquery',
+    underscore: '../libs/js/underscore',
+    backbone: '../libs/js/backbone',
+    text: '../libs/js/text'
+  }
+});
 
-// require([
-//   'backbone',
-//   'views/app',
-//   'routers/router'
-// ], function (Backbone, AppView, Workspace) {
-//   /*jshint nonew:false*/
-//   // Initialize routing and start Backbone.history()
-//   new Workspace();
-//   Backbone.history.start();
+require([
+  'jquery',
+  'backbone',
+  'routers/Router'
+], function($, Backbone, Router) {
+  /*jshint nonew:false*/
 
-//   // Initialize the application view
-//   new AppView();
-// });
-console.log('in main.js');
+  // Initialize the application view
+  new Router();
+});

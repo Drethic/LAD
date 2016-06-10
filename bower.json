@@ -16,15 +16,16 @@
   ],
   "dependencies": {
     "lodash": "^4.13.1",
-    "requirejs": "*",
-    "jquery": "1.*",
-    "backbone": "*",
-    "underscore": "*",
-    "bootstrap": "*",
-    "font-awesome": "*",
-    "backbone-validation": "*",
-    "backbone.paginator": "*",
-    "moment": "*"
+    "jquery": "^2.0.0",
+    "backbone": "^1.3.3",
+    "underscore": "^1.8.3",
+    "text": "requirejs-text#^2.0.15",
+    "requirejs": "^2.2.0",
+    "bootstrap": "^3.3.6",
+    "font-awesome": "font-awsome#^4.6.3",
+    "backbone.validation": "backbone-validation#^0.11.5",
+    "backbone.paginator": "^2.0.5",
+    "moment": "^2.13.0"
   },
   "exportsOverride": {
     "lodash": {
@@ -58,7 +59,7 @@
       "css": "css/*",
       "fonts": "fonts/*"
     },
-    "backbone-validation": {
+    "backbone.validation": {
       "js": "dist/*.js"
     },
     "backbone.paginator": {
@@ -70,7 +71,6 @@
       "css": "chosen*.css"
     },
     "moment": {
-      "js": "moment.js",
       "js": "min/*.js",
       "js/lang": "lang/*.js"
     }
