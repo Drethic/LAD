@@ -18,6 +18,9 @@ app.use(bodyParser.json());
 
 var port = process.env.PORT || 3001;        // set our port
 
+app.set('views', './src/app/views');
+app.set('view engine', 'pug');
+
 // ROUTES FOR OUR API
 // =============================================================================
 var router = express.Router();              // get an instance of the express Router
