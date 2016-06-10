@@ -16,7 +16,7 @@ module.exports = function(grunt) {
               else if (type == 'js/lang') renamedType = 'js/lang';
               else if (type == 'css') renamedType = 'css';
               else if (type == 'css/img') renamedType = 'css';
-              return path.join(renamedType);;
+              return path.join(renamedType);
             },
           install: true,
           verbose: true,
