@@ -14,6 +14,11 @@ var mongoose = require('mongoose');
 // Import bcrypt-nodejs for hashing passwords on MongoDB
 var bcrypt = require('bcrypt-nodejs');
 
+// Import local models
+var Users = require('../models/users.js').Users;
+var Roles = require('../models/roles.js').Roles;
+
+// Default seeds to add to MongoDB
 var rolesSeed = [
   {name: 'user', description: 'Default group for all users.'},
   {name: 'admin', description: 'Group for game administrators.'}
@@ -23,54 +28,6 @@ var usersSeed = [
   {userName: 'Drethic', email: 'drethic@test.com', password: 'password1', firstName: 'Joe', lastName: 'Robinson', roleId: [], options: {}},
   {userName: 'm1sf17', email: 'm1sf17@test.com', password: 'password1', firstName: 'Mike', lastName: 'Flowers', roleId: [], options: {}}
 ];
-
-// Define User schema model with 3 fields: user, email, password
-var usersSchema = new mongoose.Schema({
-  userName: {type: String, required: 'Name is required'},
-  email: {type: String, required: 'Email is required', unique: true},
-  firstName: {type: String},
-  lastName: {type: String},
-  roleId: {type: Array},
-  options: {type: Object},
-  password: {type: String, required: 'Your password is required'},
-  signupDate: {type: Date}
-});
-
-var rolesSchema = new mongoose.Schema({
-  name: {type: String, required: 'Role name is required.'},
-  description: {type: String, required: 'Role description is required.'}
-});
-
-// Mongoose middleware that is called before save to hash the password
-usersSchema.pre('save', function(next, err) {
-
-  var user = this;
-  var SALT_FACTOR = 10;
-
-  // If user is not new or the password is not modified
-  if (!user.isNew && !user.isModified('password')) {
-    return next();
-  }
-
-  // Encrypt password before saving to database
-  bcrypt.genSalt(SALT_FACTOR, function(err, salt) {
-
-    if (err) {
-      return next(err);
-    }
-
-    bcrypt.hash(user.password, salt, null, function(err, hash) {
-      if (err) {
-        return next(err);
-      }
-      user.password = hash;
-      next();
-    });
-  });
-});
-
-var Users = mongoose.model('Users', usersSchema);
-var Roles = mongoose.model('Roles', rolesSchema);
 
 function asyncFunction1(callback) {
   MongoClient.connect(databaseURL, function(err, db) {
