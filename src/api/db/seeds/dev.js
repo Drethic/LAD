@@ -1,60 +1,211 @@
-// this is the same as running `use mongoBasics` from the
-// shell
-var db = db.getSiblingDB('mongoBasics');
 
-// delete any data that was there already
-db.dropDatabase();
+// Import async.js - utility library for handlng asynchronous calls
+var async = require('async');
 
-// create fake names for our users
-var firstNames = ['Sam', 'Bill', 'Roger', 'Sara', 'Natasha', 'Nivine'];
-var lastNames = ['Lund', 'Noor', 'Riola', 'Henderson', 'Frank'];
-var usersRaw = [];
+// URL to connect to a local MongoDB with database lad.
+var databaseURL = 'mongodb://localhost:27017/lad';
 
-// Give all users a first name, and a signup date
-// give 5 out of 6 users a last name
-for (var i = 0; i < firstNames.length; i++) {
-    var user = {
-        name: {
-            first: firstNames[i],
-            last: lastNames[i]
-        },
-        signupDate: new Date()
-    };
-    usersRaw.push(user);
-}
+// Import native MongoDB client for Node.js
+var MongoClient = require('mongodb').MongoClient;
 
-// insert the users into the database
-// in the `users` collection
-db.users.insert(usersRaw);
+// Import mongoose.js to define our schema and interact with MongoDB
+var mongoose = require('mongoose');
 
-// find all users and assign them to the variable 'authors'
-var authors = db.users.find().toArray();
+// Import bcrypt-nodejs for hashing passwords on MongoDB
+var bcrypt = require('bcrypt-nodejs');
 
-var titles = ['My Awesome Recipe!', 'I love the holidays', 'How to workout', 'Parenting 101'];
-var description = "Pinterest asymmetrical raw denim, neutra sriracha lumbersexual tousled. Heirloom chia banjo brunch deep v echo park. Humblebrag tousled semiotics, tattooed hella pickled biodiesel fanny pack kickstarter tacos crucifix brooklyn. Cold-pressed drinking vinegar chillwave mlkshk. Cardigan you probably haven't heard of them mlkshk, small batch four dollar toast yuccie stumptown actually wolf literally fingerstache celiac pork belly retro. Vinyl street art fashion axe, retro lumbersexual cardigan ramps austin pug single-origin coffee. Cardigan humblebrag four loko, blog put a bird on it messenger bag disrupt kogi irony."
-var body = "Knausgaard photo booth paleo, tacos vice flexitarian bespoke celiac blue bottle williamsburg tofu four dollar toast. Pug actually cred, iPhone sustainable pitchfork DIY salvia distillery asymmetrical gentrify humblebrag. Mlkshk drinking vinegar meh selvage. Street art marfa before they sold out, flannel bicycle rights crucifix photo booth intelligentsia iPhone mustache. Semiotics thundercats health goth 8-bit, mlkshk ethical banh mi. Taxidermy pop-up dreamcatcher portland, narwhal tote bag helvetica. Four dollar toast shoreditch chillwave, craft beer tilde street art food truck yr cardigan polaroid.\
-\
-DIY flexitarian craft beer, everyday carry pug artisan food truck before they sold out polaroid heirloom butcher. Blue bottle taxidermy photo booth, small batch street art pop-up irony YOLO actually. Chartreuse PBR&B fixie, sriracha church-key master cleanse dreamcatcher pork belly williamsburg selvage raw denim bespoke heirloom four dollar toast. Heirloom etsy health goth humblebrag chambray, church-key cray four dollar toast lumbersexual freegan taxidermy fixie thundercats. Gluten-free brunch shabby chic, heirloom listicle kale chips church-key skateboard banjo lumbersexual occupy vegan mlkshk narwhal biodiesel. Drinking vinegar narwhal food truck chambray pork belly tousled. Mlkshk beard tote bag try-hard neutra wolf.\
-\
-Blog poutine authentic chillwave, chicharrones scenester art party pickled ennui celiac retro squid. Readymade beard gluten-free meditation thundercats echo park. Letterpress try-hard pork belly, ethical iPhone 90's post-ironic fingerstache. Mixtape intelligentsia austin disrupt aesthetic. Meggings polaroid swag pickled photo booth, flexitarian migas. Irony tilde celiac lumbersexual messenger bag. Helvetica keytar banjo truffaut, bushwick 3 wolf moon 8-bit pour-over meggings pork belly brunch +1 health goth.\
-\
-Blog ethical normcore roof party. Typewriter chambray post-ironic fashion axe try-hard everyday carry. Post-ironic shabby chic pork belly narwhal jean shorts hella. Vice ramps put a bird on it neutra try-hard ennui. Godard kitsch kale chips williamsburg, synth franzen raw denim bitters ugh. Williamsburg pickled art party knausgaard pabst, kale chips 8-bit brunch cliche. XOXO craft beer locavore, messenger bag blog crucifix next level mustache VHS selfies schlitz poutine gluten-free pickled PBR&B."
+var rolesSeed = [
+  {name: 'user', description: 'Default group for all users.'},
+  {name: 'admin', description: 'Group for game administrators.'}
+];
 
-var postsRaw = [];
+var usersSeed = [
+  {userName: 'Drethic', email: 'drethic@test.com', password: 'password1', firstName: 'Joe', lastName: 'Robinson', roleId: [], options: {}},
+  {userName: 'm1sf17', email: 'm1sf17@test.com', password: 'password1', firstName: 'Mike', lastName: 'Flowers', roleId: [], options: {}}
+];
 
-// Create posts from our fake titles
-// give each post an author which is the `_id` of
-// a random user from the authors array
+// Define User schema model with 3 fields: user, email, password
+var usersSchema = new mongoose.Schema({
+  userName: {type: String, required: 'Name is required'},
+  email: {type: String, required: 'Email is required', unique: true},
+  firstName: {type: String},
+  lastName: {type: String},
+  roleId: {type: Array},
+  options: {type: Object},
+  password: {type: String, required: 'Your password is required'},
+  signupDate: {type: Date}
+});
 
-for(var i = 0; i < titles.length; i++) {
-    var post = {
-        title: titles[i],
-        description: description,
-        body: body,
-        author: authors[Math.floor(Math.random() * authors.length)]._id
+var rolesSchema = new mongoose.Schema({
+  name: {type: String, required: 'Role name is required.'},
+  description: {type: String, required: 'Role description is required.'}
+});
+
+// Mongoose middleware that is called before save to hash the password
+usersSchema.pre('save', function(next, err) {
+
+  var user = this;
+  var SALT_FACTOR = 10;
+
+  // If user is not new or the password is not modified
+  if (!user.isNew && !user.isModified('password')) {
+    return next();
+  }
+
+  // Encrypt password before saving to database
+  bcrypt.genSalt(SALT_FACTOR, function(err, salt) {
+
+    if (err) {
+      return next(err);
     }
-    postsRaw.push(post);
+
+    bcrypt.hash(user.password, salt, null, function(err, hash) {
+      if (err) {
+        return next(err);
+      }
+      user.password = hash;
+      next();
+    });
+  });
+});
+
+var Users = mongoose.model('Users', usersSchema);
+var Roles = mongoose.model('Roles', rolesSchema);
+
+function asyncFunction1(callback) {
+  MongoClient.connect(databaseURL, function(err, db) {
+
+    if (err) {
+      throw err;
+    }
+
+    // Drop database which is an asynchronous call
+    db.dropDatabase(function(err, result) {
+
+      // After successfully dropping database, force
+      // close database which is another asynchronous call
+      db.close(true, function(err, result) {
+
+        // Close successful so execute callback so second
+        // function in async.serial gets called
+        callback(null, 'SUCCESS - dropped database');
+      });
+    });
+  });
 }
 
-// insert posts into posts collection
-db.posts.insert(postsRaw);
+function asyncFunction2(callback) {
+  // Open connection to MongoDB
+  mongoose.connect(databaseURL);
+
+  // Need to listen to 'connected' event then execute callback method
+  // to call the next set of code in the async.serial array
+  mongoose.connection.on('connected', function(){
+    console.log('db connected via mongoose');
+
+    // Execute callback now we have a successful connection to the DB
+    // and move on to the third function below in async.series
+    callback(null, 'SUCCESS - Connected to mongodb');
+  });
+}
+
+function asyncFunction3(callback) {
+  asyncEachFunction(rolesSeed, Roles, callback);
+  asyncEachFunction(usersSeed, Users, callback);
+}
+
+function asyncEachFunction(seed, schema, callback) {
+  var seeds = [];
+  for (i = 0; i < seed.length; i++) {
+    var seedData = new schema(seed[i]);
+    seeds.push(seedData);
+  }
+
+  async.eachSeries(
+
+    // 1st parameter is the 'seeds' array to iterate over
+    seeds,
+
+    // 2nd parameter is a function takes each seedData in the 'seeds' array
+    // as an argument and a callback function that needs to be executed
+    // when the asynchronous call complete.
+
+    // Note there is another 'callback' method here called 'dataSavedCallBack'.
+    // 'dataSavedCallBack' needs to be called to inform async.eachSeries to
+    // move on to the next seedData object in the 'seeds' array. Do not mistakenly
+    // call 'callback' defined in line 130.
+    function(seedData, dataSavedCallBack){
+
+      // There is no need to make a call to create the 'lad' database.
+      // Saving a model will automatically create the database
+      seedData.save(function(err) {
+
+        if (err) {
+          // Send JSON response to console for errors
+          console.dir(err);
+        }
+
+        // Print out which user we are saving
+        console.log('Saving record');
+
+        // Call 'userSavedCallBack' and NOT 'callback' to ensure that the next
+        // 'user' item in the 'seeds' array gets called to be saved to the database
+        dataSavedCallBack();
+      });
+
+    },
+
+    // 3rd parameter is a function to call when all seeds in 'seeds' array have
+    // completed their asynchronous user.save function
+    function(err){
+
+      if (err) {
+        console.dir(err);
+      }
+
+      console.log("Finished aysnc.each in seeding db");
+
+      // Execute callback function to signal to async.series that
+      // all asynchronous calls are now done
+      callback(null, 'SUCCESS - Seed database');
+
+    }
+  );
+}
+
+// Async series method to make sure asynchronous calls below run sequentially
+async.series([
+
+  // First function - connect to MongoDB, then drop the database
+  function(callback) {
+    asyncFunction1(callback);
+  },
+
+  // Second function - connect to MongoDB using mongoose, which is an asynchronous call
+  function(callback) {
+    asyncFunction2(callback);
+  },
+
+  // Third function - use Mongoose to create a User model and save it to database
+  function(callback) {
+    asyncFunction3(callback);
+  }
+],
+
+// This function executes when everything above is done
+function(err, results){
+
+  console.log("\n\n--- Database seed progam completed ---");
+
+  if (err) {
+    console.log("Errors = ");
+    console.dir(errors);
+  } else {
+    console.log("Results = ");
+    console.log(results);
+  }
+
+  console.log("\n\n--- Exiting database seed progam ---");
+  // Exit the process to get back to terrminal console
+  process.exit(0);
+});
