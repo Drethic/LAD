@@ -21,3 +21,14 @@ apps:
       NODE_ENV: development
     env_production:
       NODE_ENV: production
+  - script: server.js
+    name: lad-server
+    watch: false
+    error_file:
+      logs/server_error.log
+    out_file:
+      logs/server_out.log
+    env:
+      NODE_ENV: development
+    env_production:
+      NODE_ENV: production

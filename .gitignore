@@ -7,3 +7,4 @@ data/db/*
 logs/*
 !logs/readme.md
 .vagrant
+npm-debug.log
