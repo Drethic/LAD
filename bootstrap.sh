@@ -27,4 +27,4 @@ sudo npm install -g pm2
 sudo apt-get install -y git
 
 # Do initial Grunt of the project
-su -c "cd /opt/${PROJECTFOLDER} && npm install && node db/seeds/dev.js" vagrant
+su -c "cd /opt/${PROJECTFOLDER} && npm install && node db/seeds/dev.js && npm run pm2-start" vagrant

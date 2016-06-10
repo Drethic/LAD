@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "grunt pm2 start process.yml --only lad-server"
+    "postinstall": "grunt",
+    "pm2-start": "pm2 start process.yml --only lad-server"
   },
   "repository": {
     "type": "git",
