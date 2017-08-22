@@ -6,7 +6,9 @@ var path = require('path');
 
 mongoose.connect('mongodb://localhost/lad');
 
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 app.use(bodyParser.json());
 
 var port = process.env.PORT || 3000;
