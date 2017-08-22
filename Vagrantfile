@@ -7,14 +7,19 @@ VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Every Vagrant virtual environment requires a box to build off of.
-  config.vm.box = "debian/jessie64"
+  config.vm.box = "bento/ubuntu-16.04"
+
+  # Configure VM Hostname
+  config.vm.provider "virtualbox" do |vb|
+      vb.name = "LAD"
+    end
 
   # Create a private network, which allows host-only access to the machine using a specific IP.
   config.vm.network "private_network", ip: "192.168.22.33"
 
   # Share an additional folder to the guest VM. The first argument is the path on the host to the actual folder.
   # The second argument is the path on the guest to mount the folder.
-  config.vm.synced_folder ".", "/opt/lad", type: "virtualbox", owner: "vagrant", group: "vagrant", mount_options: ["dmode=777,fmode=777"]
+  config.vm.synced_folder ".", "/opt/lad", type: "virtualbox", owner: "vagrant", group: "vagrant", mount_options: ["dmode=755,fmode=644"]
 
   # Define the bootstrap file: A (shell) script that runs after first setup of your box (= provisioning)
   config.vm.provision :shell, path: "bootstrap.sh"

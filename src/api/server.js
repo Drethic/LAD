@@ -1,3 +1,4 @@
+'use strict';
 // server.js
 
 // BASE SETUP

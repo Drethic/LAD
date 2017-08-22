@@ -1,3 +1,23 @@
+################################
+# OS generated files           #
+################################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+
+################################
+# vim                          #
+################################
+*.swp
+
+################################
+# System Files                 #
+################################
 src/app/libs/js/*
 src/app/libs/css/*
 src/app/libs/fonts/*
@@ -8,3 +28,9 @@ logs/*
 !logs/readme.md
 .vagrant
 npm-debug.log
+
+################################
+# Testing Files                #
+################################
+xunit.xml
+coverage

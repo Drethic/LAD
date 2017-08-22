@@ -1,7 +1,3 @@
-/*global require*/
-/* jshint -W097 */
-'use strict';
-
 // Require.js allows us to configure shortcut alias
 require.config({
   // The shim config allows us to configure dependencies for
@@ -16,10 +12,6 @@ require.config({
         'jquery'
       ],
       exports: 'Backbone'
-    },
-    backboneLocalstorage: {
-      deps: ['backbone'],
-      exports: 'Store'
     }
   },
   paths: {
@@ -35,8 +27,9 @@ require([
   'backbone',
   'routers/Router'
 ], function($, Backbone, Router) {
-  /*jshint nonew:false*/
+  'use strict';
 
   // Initialize the application view
-  new Router();
+  var router;
+  router = new Router();
 });

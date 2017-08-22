@@ -1,0 +1,36 @@
+body {
+    margin: 0;
+}
+
+.background {
+    display: block;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.background::after {
+    content: "";
+    background: url("./bg1.gif");
+    opacity: 0.9;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: fixed;
+    z-index: -1;
+}
+
+.wrapper {
+    margin: 20px;
+}
+
+.main-wrapper {
+    display: block;
+}
+
+.main {
+    background: #cbcbcb;
+    display: inline-block;
+}
